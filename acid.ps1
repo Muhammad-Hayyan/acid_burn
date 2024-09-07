@@ -54,19 +54,21 @@ public class VolumeControl {
 }
 "@
 
-# Infinite loop to continuously increase the volume at intervals
-try {
-    while ($true) {
-        # Increase the system volume
-        [VolumeControl]::IncreaseVolume()
-
-        # Add a delay to prevent system overload (adjust the sleep time if necessary)
-        Start-Sleep -Seconds 5
+# Function to continuously increase the system volume
+$volumeJob = Start-Job -ScriptBlock {
+    try {
+        while ($true) {
+            # Increase the system volume
+            [VolumeControl]::IncreaseVolume()
+            
+            # Add a delay to prevent system overload (adjust the sleep time if necessary)
+            Start-Sleep -Seconds 5
+        }
+    } catch {
+        Write-Host "An error occurred in the volume control: $_"
     }
-} catch {
-    Write-Host "An error occurred: $_"
 }
-
+######################################################
 
 # Intro ---------------------------------------------------------------------------------------------------
  function Get-fullName {
